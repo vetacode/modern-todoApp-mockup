@@ -10,7 +10,12 @@ interface TaskItemProps {
   onEdit: (id: string) => void;
 }
 
-export default function TaskItem({ task, onToggle, onDelete, onEdit }: TaskItemProps) {
+export default function TaskItem({
+  task,
+  onToggle,
+  onDelete,
+  onEdit,
+}: TaskItemProps) {
   return (
     <div
       className={`flex items-center gap-3 p-4 rounded-lg border-2 transition-all duration-200 group ${
@@ -21,12 +26,12 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: TaskItemP
     >
       <button
         onClick={() => onToggle(task.id)}
-        className="flex-shrink-0 transition-colors duration-200"
+        className='flex-shrink-0 transition-colors duration-200 hover:cursor-pointer'
       >
         {task.completed ? (
-          <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+          <CheckCircle2 className='w-5 h-5 sm:w-6 sm:h-6 text-primary' />
         ) : (
-          <Circle className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground hover:text-primary" />
+          <Circle className='w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground hover:text-primary' />
         )}
       </button>
 
@@ -40,18 +45,18 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: TaskItemP
         {task.title}
       </span>
 
-      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
+      <div className='flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200'>
         <button
           onClick={() => onEdit(task.id)}
-          className="flex-shrink-0 p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded transition-all"
+          className='flex-shrink-0 p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded transition-all hover:cursor-pointer'
         >
-          <Edit2 className="w-4 h-4 sm:w-5 sm:h-5" />
+          <Edit2 className='w-4 h-4 sm:w-5 sm:h-5' />
         </button>
         <button
           onClick={() => onDelete(task.id)}
-          className="flex-shrink-0 p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-all"
+          className='flex-shrink-0 p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-all hover:cursor-pointer'
         >
-          <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+          <Trash2 className='w-4 h-4 sm:w-5 sm:h-5' />
         </button>
       </div>
     </div>
