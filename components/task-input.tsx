@@ -1,26 +1,34 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, ChevronDown } from 'lucide-react';
+import { Section } from './section-item';
 
 interface TaskInputProps {
-  onAddTask: (title: string) => void;
+  onAddTask: (title: string, sectionId?: string) => void;
+  sections: Section[];
 }
 
-export default function TaskInput({ onAddTask }: TaskInputProps) {
+export default function TaskInput({ onAddTask, sections }: TaskInputProps) {
   const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [selectedSection, setSelectedSection] = useState<string | undefined>(
+    sections.length > 0 ? sections[0].id : undefined
+  );
+  const [showSectionDropdown, setShowSectionDropdown] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
-      onAddTask(input.trim());
+      onAddTask(input.trim(), selectedSection);
       setInput('');
     }
   };
 
+  const selectedSectionTitle = sections.find(s => s.id === selectedSection)?.title || 'Select section';
+
   return (
-    <form onSubmit={handleSubmit} className="mb-6 sm:mb-8">
+    <form onSubmit={handleSubmit} className="mb-6 sm:mb-8 space-y-3">
       <div
         className={`flex items-center gap-3 px-4 py-3 bg-card rounded-lg border-2 transition-all duration-200 ${
           isFocused
@@ -46,6 +54,42 @@ export default function TaskInput({ onAddTask }: TaskInputProps) {
           Add
         </button>
       </div>
+
+      {/* Section Selector */}
+      {sections.length > 0 && (
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowSectionDropdown(!showSectionDropdown)}
+            className="w-full flex items-center justify-between px-4 py-2 bg-secondary/50 border-2 border-border rounded-lg hover:border-primary/50 transition-colors text-sm text-foreground"
+          >
+            <span className="text-sm">Assign to: <span className="font-medium">{selectedSectionTitle}</span></span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${showSectionDropdown ? 'rotate-180' : ''}`} />
+          </button>
+
+          {showSectionDropdown && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-card border-2 border-border rounded-lg shadow-lg z-10">
+              {sections.map((section) => (
+                <button
+                  key={section.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedSection(section.id);
+                    setShowSectionDropdown(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-colors ${
+                    selectedSection === section.id
+                      ? 'bg-primary/20 text-primary font-medium'
+                      : 'text-foreground'
+                  }`}
+                >
+                  {section.title}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </form>
   );
 }
